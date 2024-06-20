@@ -1,9 +1,11 @@
+
 body {
     background-color: rgba(0, 0, 0, 0.7);
     color: #1d3348;
     font-family: Arial, sans-serif;
     text-align: center;
 }
+
 .container {
     background: url('background-image.jpeg') no-repeat center top / cover;
     height: 50vh;
@@ -12,6 +14,7 @@ body {
     align-items: flex-end;
     padding: 20px;
 }
+
 .content {
     background-color: rgba(0, 0, 0, 0.7);
     padding: 20px;
@@ -20,10 +23,13 @@ body {
     width: 100%;
     box-sizing: border-box;
 }
+
 h2 {
     margin-bottom: 20px;
     font-size: 1.5em;
 }
+
+/* Existing styles for buttons */
 .btn {
     display: block;
     width: 100%;
@@ -34,15 +40,55 @@ h2 {
     font-size: 16px;
     cursor: pointer;
     color: white;
-    background-color: #8ecae6;
+    background-color: #8ecae6; /* Default background color */
 }
+
 .btn:hover {
     opacity: 0.8;
 }
+
+/* New styles for specific buttons */
+.gradio-container #loved_one_button {
+    background-color: #8ecae6; /* Light blue */
+}
+
+.gradio-container #loved_one_button:hover {
+    background-color: #6ab0d1; /* Slightly darker blue */
+}
+
+.gradio-container #relative_button {
+    background-color: #f4a261; /* Orange */
+}
+
+.gradio-container #relative_button:hover {
+    background-color: #e08e3e; /* Slightly darker orange */
+}
+
 .bottom-half {
     height: 50vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     background-color: white;
+}
+
+#background-image {
+    width: 100%;
+}
+
+#overlay {
+    position: relative;
+    width: 100%;
+    text-align: center;
+}
+
+#story_input {
+    width: calc(100% - 40px); /* Adjust for padding */
+    margin: 20px;
+}
+
+button {
+    width: calc(100% - 40px); /* Adjust for padding */
+    margin: 10px 20px;
 }

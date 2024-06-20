@@ -5,6 +5,10 @@ api_key = "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"
 
 openai = OpenAI(api_key=api_key)
 
+theme = gr.themes.Base(
+    primary_hue="purple",
+    secondary_hue="fuchsia",
+    neutral_hue="cyan")
 
 def segment_story(story):
     try:
@@ -53,11 +57,18 @@ def process_story(story):
 
 
 # Create a Gradio interface
-with gr.Blocks() as app:
+with gr.Blocks(theme=theme) as app:
+    gr.Markdown("## MIND CANVAS")
+    gr.Image("background-image.jpeg", elem_id="background-image")
+    with gr.Row(elem_id="overlay"):
+        with gr.Column():
+            gr.Markdown("<h2>How to support your loved one with PTSD?</h2>")
+            gr.Button("Continue as a loved one", elem_classes="loved_one_button").click(fn=None)
+            gr.Button("Continue as a relative", elem_id="relative_button").click(fn=None)
     gr.Markdown("## Story to Image Sequence Generator")
     gr.Markdown("Enter a complete story and generate a sequence of images representing different parts of the story.")
 
-    with gr.Row():
+    with gr.Column():
         story_input = gr.Textbox(lines=10, placeholder="Enter a full story here...", label="Story Input")
         submit_button = gr.Button("Generate Images")
         output_gallery = gr.Gallery(label="Generated Images")
