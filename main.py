@@ -1,7 +1,6 @@
 import gradio as gr
 from openai import OpenAI
 
-# Fetch the API key from environment variables
 api_key = "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"
 
 openai = OpenAI(api_key=api_key)
@@ -13,12 +12,12 @@ def segment_story(story):
             model="gpt-4-0613",
             messages=[
                 {"role": "system", "content": "You are an expert story segmenter."},
-                {"role": "user", "content": f"Divide this story into exactly six chronological parts, "
-                                            f"no more and no less, and each part cant be empty: {story}"}
+                {"role": "user", "content": f"Divide this story into exactly six chronological parts,"
+                                            f" between every two parts put the character &: {story}"}
             ],
             max_tokens=1500
         )
-        parts = response.choices[0].message.content.strip().split('\n')
+        parts = response.choices[0].message.content.strip().split('&')
         for part in parts:
             print(part)
         return parts
