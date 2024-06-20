@@ -6,7 +6,7 @@ api_key = "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"
 openai = OpenAI(api_key=api_key)
 
 theme = gr.themes.Base(
-    primary_hue="purple",
+    primary_hue="yellow",
     secondary_hue="fuchsia",
     neutral_hue="cyan")
 
@@ -56,23 +56,34 @@ def process_story(story):
         return ["Error in story segmentation"]
 
 
+def set_personal_prompt(gender, distance, style, triggers):
+    pass
+
+
 # Create a Gradio interface
 with gr.Blocks(theme=theme) as app:
-    gr.Markdown("## MIND CANVAS")
+    gr.Markdown('<h1 style="font-size:50px;"> MIND CANVAS</h1>')
     gr.Image("background-image.jpeg", elem_id="background-image")
+    personal_prompt = ""
     with gr.Row(elem_id="overlay"):
         with gr.Column():
             gr.Markdown("<h2>How to support your loved one with PTSD?</h2>")
-            gr.Button("Continue as a loved one", elem_classes="loved_one_button").click(fn=None)
+            gr.Button("Continue as a loved one", elem_classes="loved_one_button", variant='primary').click(fn=None)
             gr.Button("Continue as a relative", elem_id="relative_button").click(fn=None)
-    gr.Markdown("## Story to Image Sequence Generator")
-    gr.Markdown("Enter a complete story and generate a sequence of images representing different parts of the story.")
+            gender = gr.Dropdown(["Male", "Female", "Other"], type="value", label="Gender")
+
+            style = gr.Textbox(lines=1, placeholder="Cartoon / realistic / hand-drawn...", label="Choose a style")
+            triggers = gr.Textbox(lines=3, placeholder="Enter what you don't want to see...", label="Triggers")
+            personal_prompt = set_personal_prompt(gender, distance, style, triggers)
+
+    with gr.Column():
+        gr.Markdown("## Story to Image Sequence Generator")
+        gr.Markdown("Enter a complete story and generate a sequence of images representing different parts of the story.")
 
     with gr.Column():
         story_input = gr.Textbox(lines=10, placeholder="Enter a full story here...", label="Story Input")
-        submit_button = gr.Button("Generate Images")
+        submit_button = gr.Button("Generate Images", variant='primary')
         output_gallery = gr.Gallery(label="Generated Images")
-
     submit_button.click(fn=process_story, inputs=story_input, outputs=output_gallery)
 
 if __name__ == "__main__":
