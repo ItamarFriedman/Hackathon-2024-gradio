@@ -70,15 +70,15 @@ def console_test(gender, age, style, triggers):
 
 # Create a Gradio interface
 with gr.Blocks(theme=theme) as app:
-    gr.Markdown('<h1 style="font-size:50px;"> MIND CANVAS</h1>')
+    gr.Markdown('<h1 style="font-size:50px; text-align:center; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">MIND CANVAS</h1>')
     gr.Image("background-image.jpeg", elem_id="background-image")
     personal_prmpt = ""
     style_prmpt = ""
     with gr.Row(elem_id="overlay"):
         with gr.Column():
-            gr.Markdown("<h2>How to support your loved one with PTSD?</h2>")
-            gr.Button("Continue as a loved one", elem_classes="loved_one_button", variant='primary').click(fn=None)
-            gr.Button("Continue as a relative", elem_id="relative_button").click(fn=None)
+            gr.Markdown("<h2>A quick setup and your scene will be ready...</h2>")
+            gr.Button("GUIDE", elem_classes="loved_one_button", variant='primary').click(fn=None)
+            gr.Button("Privacy Information", elem_id="relative_button").click(fn=None)
             gender = gr.Dropdown(["Male", "Female", "Other"], type="value", label="Gender")
             age = gr.Textbox(lines=1, placeholder="Write a number...", label="Enter your age")
             style = gr.Textbox(lines=1, placeholder="Cartoon / realistic / hand-drawn...", label="Choose a style")
