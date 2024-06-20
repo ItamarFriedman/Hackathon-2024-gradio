@@ -53,13 +53,16 @@ def process_story(story):
 
 
 # Create a Gradio interface
-interface = gr.Interface(
-    fn=process_story,
-    inputs=gr.Textbox(lines=10, placeholder="Enter a full story here..."),
-    outputs=[gr.Gallery(label="Generated Images")],
-    title="Story to Image Sequence Generator",
-    description="Enter a complete story and generate a sequence of images representing different parts of the story."
-)
+with gr.Blocks() as app:
+    gr.Markdown("## Story to Image Sequence Generator")
+    gr.Markdown("Enter a complete story and generate a sequence of images representing different parts of the story.")
+
+    with gr.Row():
+        story_input = gr.Textbox(lines=10, placeholder="Enter a full story here...", label="Story Input")
+        submit_button = gr.Button("Generate Images")
+        output_gallery = gr.Gallery(label="Generated Images")
+
+    submit_button.click(fn=process_story, inputs=story_input, outputs=output_gallery)
 
 if __name__ == "__main__":
-    interface.launch()
+    app.launch()
