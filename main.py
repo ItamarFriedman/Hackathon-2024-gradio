@@ -34,13 +34,14 @@ def segment_story(story):
         return []
 
 
-def generate_image(sub_story):
+def generate_image(sub_story, wrappers_w):
     print("starting to generate image")
     print("the current substory is:", sub_story)
     try:
+        print(wrappers_w[0]+" "+sub_story+" "+wrappers_w[1])
         response = openai.images.generate(
             model="dall-e-2",
-            prompt=sub_story,
+            prompt=wrappers_w[0]+" "+sub_story+" "+wrappers_w[1],
             n=1,
             size="1024x1024"
         )
@@ -52,11 +53,11 @@ def generate_image(sub_story):
     return image_url
 
 
-def handle_next_image(sub_stories, index):
+def handle_next_image(sub_stories, index, wrappers_z):
     print("starting to handle next image")
     if index < len(sub_stories):
         sub_story = sub_stories[index]
-        image_url = generate_image(sub_story)
+        image_url = generate_image(sub_story, wrappers_z)
         index += 1
         return sub_story, image_url, index
     else:
@@ -71,12 +72,13 @@ def process_story(story):
         return ["Error in story segmentation"]
 
 
-def console_test(gender, age, style, triggers):
+def create_wrappers(gender, age, style, triggers):
     personal_prmpt = "Backround: the narrator is a " + gender + ", his age is " + age + "."
     style_prmpt = "In " + style + " style, avoid showing " + triggers
     print(personal_prmpt + " -=PROMPT=- " + style_prmpt)
     personal_wrapper = personal_prmpt
     style_wrapper = style_prmpt
+    return personal_prmpt, style_prmpt
 
 
 
@@ -86,6 +88,7 @@ with gr.Blocks(theme=theme) as app:
     sub_stories_state = gr.State([])
     image_urls_state = gr.State([])
     index_state = gr.State(0)
+    wrappers = gr.State([])
 
     gr.Markdown('<h1 style="font-size:50px; text-align:center; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">MIND CANVAS</h1>')
     gr.Image("background-image.jpeg", elem_id="background-image")
@@ -98,7 +101,7 @@ with gr.Blocks(theme=theme) as app:
             age = gr.Textbox(lines=1, placeholder="Write a number...", label="Enter your age")
             style = gr.Textbox(lines=1, placeholder="Cartoon / realistic / hand-drawn...", label="Choose a style")
             triggers = gr.Textbox(lines=3, placeholder="Enter what you don't want to see...", label="Triggers")
-            gr.Button("Save").click(fn=console_test, inputs=[gender, age, style, triggers])
+            gr.Button("Save").click(fn=create_wrappers, inputs=[gender, age, style, triggers], outputs=wrappers)
 
 
     with gr.Column():
@@ -155,9 +158,9 @@ with gr.Blocks(theme=theme) as app:
 
         submit_button.click(fn=handle_submit_click, inputs=story_input, outputs=[sub_stories_state, index_state, wait_text])
 
-        def handle_generate_click(sub_stories, index):
+        def handle_generate_click(sub_stories, index, wrappers_state):
             print("starting to handle generate click")
-            sub_story, image_url, new_index = handle_next_image(sub_stories, index)
+            sub_story, image_url, new_index = handle_next_image(sub_stories, index, wrappers_state)
             # if image_url:
             #    with main_container:
             #        gr.Text(value=sub_story, interactive=False)
@@ -165,22 +168,22 @@ with gr.Blocks(theme=theme) as app:
             #        print("tried to print image and text")
             return sub_story, image_url, new_index
 
-        generate1_button.click(fn=handle_generate_click, inputs=[sub_stories_state, index_state],
+        generate1_button.click(fn=handle_generate_click, inputs=[sub_stories_state, index_state, wrappers],
                                outputs=[story1_output, image1_output, index_state])
 
-        generate2_button.click(fn=handle_generate_click, inputs=[sub_stories_state, index_state],
+        generate2_button.click(fn=handle_generate_click, inputs=[sub_stories_state, index_state, wrappers],
                                outputs=[story2_output, image2_output, index_state])
 
-        generate3_button.click(fn=handle_generate_click, inputs=[sub_stories_state, index_state],
+        generate3_button.click(fn=handle_generate_click, inputs=[sub_stories_state, index_state, wrappers],
                                outputs=[story3_output, image3_output, index_state])
 
-        generate4_button.click(fn=handle_generate_click, inputs=[sub_stories_state, index_state],
+        generate4_button.click(fn=handle_generate_click, inputs=[sub_stories_state, index_state, wrappers],
                                outputs=[story4_output, image4_output, index_state])
 
-        generate5_button.click(fn=handle_generate_click, inputs=[sub_stories_state, index_state],
+        generate5_button.click(fn=handle_generate_click, inputs=[sub_stories_state, index_state, wrappers],
                                outputs=[story5_output, image5_output, index_state])
 
-        generate6_button.click(fn=handle_generate_click, inputs=[sub_stories_state, index_state],
+        generate6_button.click(fn=handle_generate_click, inputs=[sub_stories_state, index_state, wrappers],
                                outputs=[story6_output, image6_output, index_state])
 
 
