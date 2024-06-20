@@ -3,6 +3,9 @@ from openai import OpenAI
 
 api_key = "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"
 
+personal_wrapper = ""
+style_wrapper = ""
+
 openai = OpenAI(api_key=api_key)
 
 theme = gr.themes.Base(
@@ -56,25 +59,32 @@ def process_story(story):
         return ["Error in story segmentation"]
 
 
-def set_personal_prompt(gender, distance, style, triggers):
-    pass
+def console_test(gender, age, style, triggers):
+    personal_prmpt = "Backround: the narrator is a " + gender + ", his age is " + age + "."
+    style_prmpt = "In " + style + " style, avoid showing " + triggers
+    print(personal_prmpt + " -=PROMPT=- " + style_prmpt)
+    personal_wrapper = personal_prmpt
+    style_wrapper = style_prmpt
+
 
 
 # Create a Gradio interface
 with gr.Blocks(theme=theme) as app:
     gr.Markdown('<h1 style="font-size:50px;"> MIND CANVAS</h1>')
     gr.Image("background-image.jpeg", elem_id="background-image")
-    personal_prompt = ""
+    personal_prmpt = ""
+    style_prmpt = ""
     with gr.Row(elem_id="overlay"):
         with gr.Column():
             gr.Markdown("<h2>How to support your loved one with PTSD?</h2>")
             gr.Button("Continue as a loved one", elem_classes="loved_one_button", variant='primary').click(fn=None)
             gr.Button("Continue as a relative", elem_id="relative_button").click(fn=None)
             gender = gr.Dropdown(["Male", "Female", "Other"], type="value", label="Gender")
-
+            age = gr.Textbox(lines=1, placeholder="Write a number...", label="Enter your age")
             style = gr.Textbox(lines=1, placeholder="Cartoon / realistic / hand-drawn...", label="Choose a style")
             triggers = gr.Textbox(lines=3, placeholder="Enter what you don't want to see...", label="Triggers")
-            personal_prompt = set_personal_prompt(gender, distance, style, triggers)
+            gr.Button("Save").click(fn=console_test, inputs=[gender, age, style, triggers])
+
 
     with gr.Column():
         gr.Markdown("## Story to Image Sequence Generator")
