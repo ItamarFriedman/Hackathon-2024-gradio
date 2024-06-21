@@ -1,5 +1,6 @@
 import gradio as gr
 from openai import OpenAI
+from fpdf import FPDF
 
 api_key = "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"
 
@@ -12,6 +13,34 @@ theme = gr.themes.Base(
     primary_hue="yellow",
     secondary_hue="fuchsia",
     neutral_hue="cyan")
+
+
+def create_pdf(image_urls):
+    print(image_urls)
+    if not image_urls:
+        return "No image URLs provided."
+
+    pdf = FPDF()
+    x_position = 10
+    y_position = 10
+    image_width = 180
+    y_increment = 60
+
+    try:
+        for url in image_urls:
+            pdf.add_page()
+            pdf.image(url, x=x_position, y=y_position, w=image_width, type='PNG')
+            # y_position += y_increment
+    except Exception as e:
+        return f"Failed to add images to PDF: {str(e)}"
+
+    pdf_filename = "Generated_Images.pdf"
+    try:
+        pdf.output(pdf_filename)
+    except Exception as e:
+        return f"Failed to save PDF: {str(e)}"
+
+    return pdf_filename
 
 
 def segment_story(story):
@@ -152,39 +181,44 @@ with gr.Blocks(theme=theme) as app:
         story6_output = gr.Textbox(label="Generating Text #6", lines=3)
         image6_output = gr.Image(label="Generated Image #6")
 
+        pdf_button = gr.Button("Export as PDF")
+        output_label = gr.Label()
+        pdf_button.click(fn=create_pdf, inputs=image_urls_state, outputs=output_label)
+
         def handle_submit_click(story_input_s):
             sub_stories = segment_story(story_input_s)
             return sub_stories, 0, gr.Text(value="All Done!", interactive=False)
 
         submit_button.click(fn=handle_submit_click, inputs=story_input, outputs=[sub_stories_state, index_state, wait_text])
 
-        def handle_generate_click(sub_stories, index, wrappers_state):
+        def handle_generate_click(sub_stories, index, wrappers_state, urls_state):
             print("starting to handle generate click")
             sub_story, image_url, new_index = handle_next_image(sub_stories, index, wrappers_state)
+            urls_state.append(image_url)
             # if image_url:
             #    with main_container:
             #        gr.Text(value=sub_story, interactive=False)
             #        gr.Image(value=image_url)
             #        print("tried to print image and text")
-            return sub_story, image_url, new_index
+            return sub_story, image_url, new_index, urls_state
 
-        generate1_button.click(fn=handle_generate_click, inputs=[sub_stories_state, index_state, wrappers],
-                               outputs=[story1_output, image1_output, index_state])
+        generate1_button.click(fn=handle_generate_click, inputs=[sub_stories_state, index_state, wrappers, image_urls_state],
+                               outputs=[story1_output, image1_output, index_state, image_urls_state])
 
-        generate2_button.click(fn=handle_generate_click, inputs=[sub_stories_state, index_state, wrappers],
-                               outputs=[story2_output, image2_output, index_state])
+        generate2_button.click(fn=handle_generate_click, inputs=[sub_stories_state, index_state, wrappers, image_urls_state],
+                               outputs=[story2_output, image2_output, index_state, image_urls_state])
 
-        generate3_button.click(fn=handle_generate_click, inputs=[sub_stories_state, index_state, wrappers],
-                               outputs=[story3_output, image3_output, index_state])
+        generate3_button.click(fn=handle_generate_click, inputs=[sub_stories_state, index_state, wrappers, image_urls_state],
+                               outputs=[story3_output, image3_output, index_state, image_urls_state])
 
-        generate4_button.click(fn=handle_generate_click, inputs=[sub_stories_state, index_state, wrappers],
-                               outputs=[story4_output, image4_output, index_state])
+        generate4_button.click(fn=handle_generate_click, inputs=[sub_stories_state, index_state, wrappers, image_urls_state],
+                               outputs=[story4_output, image4_output, index_state, image_urls_state])
 
-        generate5_button.click(fn=handle_generate_click, inputs=[sub_stories_state, index_state, wrappers],
-                               outputs=[story5_output, image5_output, index_state])
+        generate5_button.click(fn=handle_generate_click, inputs=[sub_stories_state, index_state, wrappers, image_urls_state],
+                               outputs=[story5_output, image5_output, index_state, image_urls_state])
 
-        generate6_button.click(fn=handle_generate_click, inputs=[sub_stories_state, index_state, wrappers],
-                               outputs=[story6_output, image6_output, index_state])
+        generate6_button.click(fn=handle_generate_click, inputs=[sub_stories_state, index_state, wrappers, image_urls_state],
+                               outputs=[story6_output, image6_output, index_state, image_urls_state])
 
 
 if __name__ == "__main__":
