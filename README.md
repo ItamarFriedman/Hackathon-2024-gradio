@@ -106,5 +106,11 @@ The web app was developed using the Gradio Python library, leveraging OpenAI's A
 
 
 
+5. Final exported PDF
+
+![image](https://github.com/ItamarFriedman/Hackathon-2024-gradio/assets/102632171/bd135845-431b-4055-8d4e-67d316645a86)
+
+
+
 <h2>Can i run it myself?</h2>
 You can run MIND CANVAS locally on your machine or use ngrok to tunnel it to a public URL. Note that you'll need to insert a valid OpenAI API key for the app to function.
