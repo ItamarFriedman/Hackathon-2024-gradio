@@ -15,22 +15,67 @@ theme = gr.themes.Base(
     neutral_hue="cyan")
 
 
-def create_pdf(image_urls):
+def create_pdf(image_urls, sub_stories_state):
+    if not image_urls:
+        return "No image URLs provided."
+
+    pdf = FPDF()
+    pdf.set_auto_page_break(auto=True, margin=15)  # Automatically add page breaks
+
+    # Define the font for the text
+    pdf.set_font("Arial", size=12)  # Using Arial font
+
+    # Define constants for positioning and size
+    x_position = 10  # Margin from the left
+    y_position = 10  # Starting position from top
+    image_scale_width = 190  # Width in mm, adjusted for A4 size
+    image_scale_height = 190  # Height in mm, keeping aspect ratio
+    text_height = 10  # Height reserved for text
+
+    try:
+        for url, text in zip(image_urls, sub_stories_state):
+            pdf.add_page()  # Add a new page for each image and text pair
+
+            # Add image
+            pdf.image(url, x=x_position, y=y_position, w=image_scale_width, h=image_scale_height, type='PNG')
+
+            # Calculate text position: below the image with a small padding
+            text_y_position = y_position + image_scale_height + 5
+
+            # Adding text below the image
+            pdf.set_xy(x_position, text_y_position)
+            pdf.multi_cell(170, text_height, text,border=0, align='C')  # Center-align the text
+
+    except Exception as e:
+        return f"Failed to add images to PDF: {str(e)}"
+
+    pdf_filename = "Generated_Images.pdf"
+    try:
+        pdf.output(pdf_filename)
+    except Exception as e:
+        return f"Failed to save PDF: {str(e)}"
+
+    return pdf_filename
+
+def create_pdf2(image_urls, sub_stories_state):
     print(image_urls)
     if not image_urls:
         return "No image URLs provided."
 
     pdf = FPDF()
+    pdf.set_font("Arial", size=14)
     x_position = 10
     y_position = 10
     image_width = 180
-    y_increment = 60
+    y_increment = 700
 
     try:
-        for url in image_urls:
+        for url, text in zip(image_urls, sub_stories_state):
             pdf.add_page()
             pdf.image(url, x=x_position, y=y_position, w=image_width, type='PNG')
-            # y_position += y_increment
+            y_position += y_increment
+            pdf.set_y(y_position)
+            pdf.cell(200, 30, text, 0, 2, 'C')
     except Exception as e:
         return f"Failed to add images to PDF: {str(e)}"
 
@@ -182,8 +227,7 @@ with gr.Blocks(theme=theme) as app:
         image6_output = gr.Image(label="Generated Image #6")
 
         pdf_button = gr.Button("Export as PDF")
-        output_label = gr.Label()
-        pdf_button.click(fn=create_pdf, inputs=image_urls_state, outputs=output_label)
+        pdf_button.click(fn=create_pdf, inputs=[image_urls_state, sub_stories_state], outputs=gr.File(label="Download PDF"))
 
         def handle_submit_click(story_input_s):
             sub_stories = segment_story(story_input_s)
