@@ -1,8 +1,7 @@
 <h1> Hackathon-2024-gradio - MIND CANVAS </h1> 
 
 <h2>What is MIND CANVAS?</h2>
-An interactive website for mobile, Used in therapy to help the patient visualize past events and give them a chronological order.
-Fill in just a few detailes, tell your story and be ready to get a series of photos.
+MIND CANVAS is an interactive mobile web app designed for therapy sessions. It helps patients visualize past events and organize them chronologically by simply filling in details, telling their story, and receiving a series of photos and texts as a PDF.
 
 <h2>The psychology behind the app</h2>
 Effective treatment for individuals with PTSD often involves controlled exposure to their traumatic experiences, often facilitated through art therapy. However, drawing during therapy sessions can be time-consuming and not everyone possesses the necessary skills.
@@ -10,7 +9,7 @@ Another challenge is that individuals with PTSD often struggle to organize their
 Our app is designed to assist in therapy sessions where patients, under therapist supervision, can create a series of images and text descriptions detailing their experiences. This process helps them to reconstruct and order events in a clear chronological and linear manner. By the end of the session, patients receive a physical album documenting their journey. This tangible artifact empowers patients by providing them with a physical representation of their experiences that they can revisit and engage with on their own terms beyond therapy sessions.
 
 <h2>The technical stuff</h2>
-The webb-app was developed using the Gradio Python library, utilizing OpenAI's API. During the 24-hour hackathon, we had to learn using the library's interface from scratch.
+The web app was developed using the Gradio Python library, leveraging OpenAI's API. During the 24-hour hackathon, we learned to use the library's interface from scratch.
 
 <h2>Screenshots:</h2>
 
@@ -60,7 +59,9 @@ The webb-app was developed using the Gradio Python library, utilizing OpenAI's A
 
 3. Generating 6 images for the 6 scenes.
 
-![app3big](https://github.com/ItamarFriedman/Hackathon-2024-gradio/assets/102632171/0fdfa5de-248b-4093-8cd5-022ec80b212d)
+![app31big](https://github.com/ItamarFriedman/Hackathon-2024-gradio/assets/102632171/0b65e799-0581-4257-814f-7eefce59a9ef)                                           ![app32big](https://github.com/ItamarFriedman/Hackathon-2024-gradio/assets/102632171/e7cfa06a-b7b7-4b12-ba2f-aae00e7f9151)
+
+
 
 
 
@@ -106,4 +107,4 @@ The webb-app was developed using the Gradio Python library, utilizing OpenAI's A
 
 
 <h2>Can i run it myself?</h2>
-You can run it locally on your machine, or use ngrok to tunnel it to a public URL. Note that you must insert a valid OpenAI API key for the app to run.
+You can run MIND CANVAS locally on your machine or use ngrok to tunnel it to a public URL. Note that you'll need to insert a valid OpenAI API key for the app to function.
