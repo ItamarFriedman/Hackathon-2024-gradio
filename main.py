@@ -4,9 +4,6 @@ from fpdf import FPDF
 
 api_key = "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"
 
-personal_wrapper = ""
-style_wrapper = ""
-
 openai = OpenAI(api_key=api_key)
 
 theme = gr.themes.Base(
@@ -148,7 +145,7 @@ def process_story(story):
 
 def create_wrappers(gender, age, style, triggers):
     personal_prmpt = "Backround: the narrator is a " + gender + ", his age is " + age + "."
-    style_prmpt = "In " + style + " style, avoid showing " + triggers
+    style_prmpt = "In " + style + " style."
     print(personal_prmpt + " -=PROMPT=- " + style_prmpt)
     personal_wrapper = personal_prmpt
     style_wrapper = style_prmpt
