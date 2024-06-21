@@ -6,6 +6,17 @@ api_key = "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"
 
 openai = OpenAI(api_key=api_key)
 
+js_func = """
+function refresh() {
+    const url = new URL(window.location);
+
+    if (url.searchParams.get('__theme') !== 'dark') {
+        url.searchParams.set('__theme', 'dark');
+        window.location.href = url.href;
+    }
+}
+"""
+
 theme = gr.themes.Base(
     primary_hue="yellow",
     secondary_hue="fuchsia",
@@ -111,8 +122,8 @@ def generate_image(sub_story, wrappers_w):
     try:
         print(wrappers_w[0]+" "+sub_story+" "+wrappers_w[1])
         response = openai.images.generate(
-            model="dall-e-2",
-            prompt=wrappers_w[0]+" "+sub_story+" "+wrappers_w[1],
+            model="dall-e-3",
+            prompt=wrappers_w[0]+" "+sub_story+" "+wrappers_w[1]+" without text.",
             n=1,
             size="1024x1024"
         )
@@ -154,7 +165,7 @@ def create_wrappers(gender, age, style, triggers):
 
 
 # Create a Gradio interface
-with gr.Blocks(theme=theme) as app:
+with gr.Blocks(theme=theme, js=js_func) as app:
     # states for the ai part
     sub_stories_state = gr.State([])
     image_urls_state = gr.State([])
