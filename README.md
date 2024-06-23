@@ -1,5 +1,8 @@
 <h1> Hackathon-2024-gradio - MIND CANVAS </h1> 
 
+<img src="https://github.com/ItamarFriedman/Hackathon-2024-gradio/assets/102632171/74a0563f-de7c-49ee-9825-d281040ff942" alt="App Screenshot" width="400" style="display:block; margin:auto;"/>
+
+
 <h2>Table of Contents</h2>
 <ol>
     <li><a href="#what-is-mind-canvas">What is MIND CANVAS?</a></li>
