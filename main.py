@@ -2,7 +2,12 @@ import gradio as gr
 from openai import OpenAI
 from fpdf import FPDF
 
-api_key = "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"
+import os
+
+api_key = os.getenv("OPENAI_API_KEY")
+if api_key is None:
+    raise ValueError("No API key found. Please set the OPENAI_API_KEY environment variable.")
+
 
 openai = OpenAI(api_key=api_key)
 
